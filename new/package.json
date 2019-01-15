@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,5 +17,8 @@
     "string-tokenizer": "0.0.8",
     "url-regex": "^4.1.1",
     "word-definition": "^2.1.6"
+  },
+  "engines": {
+    "node": "8.12"
   }
 }

@@ -20,9 +20,9 @@ const port = PORT || 80
 app.post('/', (req, res) => {
   let a = req.body['text'].substring(0,3);
   let b = req.body['text'].substring(4);
-  cryptoex.getRate(b, a).then((rate) => {
+  cryptoex.getRates(a).then((rates) => {
   	//console.log(rate)
-  	res.send('1' + b + ' is: ' + rate + a);
+  	res.send('1' + a + ' is: ' + rates[b] + b);
 	});
 })
 

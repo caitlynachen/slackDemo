@@ -2,8 +2,9 @@
   "name": "dict",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
+    "start": "node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,5 +13,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "word-definition": "^2.1.6"
+  },
+  "engines": {
+    "node": "8.12"
   }
 }
