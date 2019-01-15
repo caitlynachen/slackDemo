@@ -3,11 +3,15 @@ const bodyParser = require('body-parser')
 var wd = require("word-definition");
 const createShortUrlsFactory = require('./createShortUrls')
 const slashCommandFactory = require('./slashCommand')
+const { WebClient } = require('@slack/client');
+
 
 const app = new Express()
 app.use(bodyParser.urlencoded({extended: true}))
 
-const {SLACK_TOKEN: slackToken, REBRANDLY_APIKEY: apiKey, PORT} = process.env
+const {SLACK_TOKEN: slackToken, REBRANDLY_APIKEY: apiKey, WEB_TOKEN: webtoken, PORT} = process.env
+const web = new WebClient(webtoken);
+
 
 if (!slackToken || !apiKey) {
   console.error('missing environment variables SLACK_TOKEN and/or REBRANDLY_APIKEY')
@@ -23,7 +27,13 @@ const slashCommand = slashCommandFactory(rebrandlyClient, slackToken)
 app.post('/', (req, res) => {
   slashCommand(req.body)
     .then((result) => {
-      return res.json(result)
+    	web.chat.postMessage({ channel: req.body['channel_id'], text: result['text'], attachments: result['attachments'] })
+  .then((res) => {
+    // `res` contains information about the posted message
+    console.log('Message sent: ');
+  })
+  .catch(console.error);
+     // return res.json(result)
     })
     .catch(console.error)
 })
