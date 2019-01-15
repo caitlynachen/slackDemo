@@ -1,14 +1,17 @@
 const Express = require('express')
 const bodyParser = require('body-parser')
 var wd = require("word-definition");
-const { WebClient } = require('@slack/client');
+// const { WebClient } = require('@slack/client');
+const { RTMClient } = require('@slack/client');
+
 
 const app = new Express()
 app.use(bodyParser.urlencoded({extended: true}))
 
 const {SLACK_TOKEN: slackToken, WEB_TOKEN: webtoken, PORT} = process.env
-const web = new WebClient(webtoken);
-
+// const web = new WebClient(webtoken);
+const rtm = new RTMClient(webtoken);
+rtm.start();
 
 
 if (!slackToken) {
@@ -25,7 +28,7 @@ app.post('/', (req, res) => {
   wd.getDef(req.body['text'], "en", null, function(definition) {
     console.log(definition);
     res.send(req.body['command'] + ': ' + req.body['text']);
-    web.chat.postMessage({ channel: req.body['channel_id'], text: 'The definition of ' + definition['word'] + ' (' + definition['category'] + ')' + ' is: ' + definition['definition'] })
+    rtm.sendMessage('The definition of ' + definition['word'] + ' (' + definition['category'] + ')' + ' is: ' + definition['definition'], req.body['channel_id'])
   .then((res) => {
     // `res` contains information about the posted message
     console.log('Message sent: ');
